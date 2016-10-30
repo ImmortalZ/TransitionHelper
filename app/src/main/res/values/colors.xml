@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="bg_teal">#009688</color>
+    <color name="bg_teal_light">#B2DFDB</color>
+    <color name="bg_purple">#673AB7</color>
+    <color name="bg_white">#ffffff</color>
+    <color name="bg_yellow">#FFC107</color>
+</resources>

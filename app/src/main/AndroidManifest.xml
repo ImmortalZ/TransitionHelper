@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="immortalz.me.transitionhelper">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.image.ImageActivity" />
+        <activity android:name=".demo.image.ImageDetailActivity" />
+        <activity android:name=".demo.recyclerview.RvActivity"
+
+            />
+        <activity android:name=".demo.recyclerview.RvDetailActivity" />
+        <activity
+            android:name=".demo.fab.FabActivity"
+            android:theme="@style/ColorStyle" />
+        <activity
+            android:name=".demo.fab.FabCircleActivity"
+            android:theme="@style/ColorStyle" />
+        <activity
+            android:name=".demo.fab.FabNoCircleActivity"
+            android:theme="@style/ColorStyle" />
+        <activity android:name=".demo.fragment.FActivity" />
+        <activity android:name=".demo.fragment.FDetailActivity" />
+        <activity android:name=".demo.fab.ButtonActivity" />
+    </application>
+
+</manifest>
