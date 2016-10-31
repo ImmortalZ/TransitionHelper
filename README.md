@@ -4,6 +4,9 @@ This is a **simple** util to create Activity transition animation
 
 API compatible with <b>Android 2.2+</b>
 
+
+[中文说明](http://immortalz.me/859.html)
+
 ##Screenshots
 
 <img src="screenshots/image.gif" width="180" height="320">
