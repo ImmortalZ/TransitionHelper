@@ -21,7 +21,10 @@ TransitionsHeleper.startAcitivty((Activity) mContext, RvDetailActivity.class,
                         holder.itemView.findViewById(R.id.iv1),
                         imageUrl);
 ```
-    target Activity
+
+>target Activity
+
+
 
 ```java
 TransitionsHeleper.getInstance()
@@ -111,7 +114,7 @@ TransitionsHeleper.getInstance()
 
 ```java
 dependencies {
-   compile 'me.immortalz:transitionhelper:1.0.3'
+   compile 'me.immortalz:transitionhelper:1.0.4'
 }
 ```
 
