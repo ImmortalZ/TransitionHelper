@@ -42,6 +42,6 @@ public class ImageActivity extends BaseActivity {
 
     @OnClick(R.id.iv1)
     public void onClick() {
-        TransitionsHeleper.startAcitivty(this, ImageDetailActivity.class, iv1, imgUrl);
+        TransitionsHeleper.startActivity(this, ImageDetailActivity.class, iv1, imgUrl);
     }
 }

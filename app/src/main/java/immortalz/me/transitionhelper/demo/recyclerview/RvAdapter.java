@@ -32,7 +32,7 @@ public class RvAdapter extends CommonAdapter<String> {
         holder.setOnClickListener(R.id.iv1, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TransitionsHeleper.startAcitivty((Activity) mContext, RvDetailActivity.class,
+                TransitionsHeleper.startActivity((Activity) mContext, RvDetailActivity.class,
                         holder.itemView.findViewById(R.id.iv1),
                         str);
             }

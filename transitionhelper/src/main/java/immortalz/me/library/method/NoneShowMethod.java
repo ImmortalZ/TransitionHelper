@@ -1,7 +1,6 @@
 package immortalz.me.library.method;
 
 import android.animation.AnimatorSet;
-import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -24,10 +23,10 @@ public  class NoneShowMethod extends ShowMethod {
 
     @Override
     public void translate(InfoBean bean, RenderView parent, View child) {
+
         startColor = parent.getResources().getColor(R.color.showmethod_start_color);
         endColor = parent.getResources().getColor(R.color.showmethod_end_color);
-        ObjectAnimator colorAnimator = ObjectAnimator.ofInt(parent, "backgroundColor", startColor, endColor);
-        colorAnimator.setEvaluator(new ArgbEvaluator());
+
         set.setInterpolator(new AccelerateInterpolator());
         set.setDuration(duration).start();
     }
@@ -36,7 +35,7 @@ public  class NoneShowMethod extends ShowMethod {
     public void loadCopyView(InfoBean bean, ImageView copyView) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-                ObjectAnimator.ofFloat(copyView,"rotation",0,90),
+                ObjectAnimator.ofFloat(copyView,"rotation",0,180),
                 ObjectAnimator.ofFloat(copyView, "scaleX", 1, 0),
                 ObjectAnimator.ofFloat(copyView, "scaleY", 1, 0)
         );

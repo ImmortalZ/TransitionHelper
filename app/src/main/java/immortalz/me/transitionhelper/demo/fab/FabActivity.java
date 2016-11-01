@@ -33,13 +33,13 @@ public class FabActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_no:
-                TransitionsHeleper.startAcitivty(FabActivity.this, FabNoCircleActivity.class, btnNo);
+                TransitionsHeleper.startActivity(FabActivity.this, FabNoCircleActivity.class, btnNo);
                 break;
             case R.id.btn_circle:
-                TransitionsHeleper.startAcitivty(FabActivity.this, FabCircleActivity.class, btnCircle);
+                TransitionsHeleper.startActivity(FabActivity.this, FabCircleActivity.class, btnCircle);
                 break;
             case R.id.btn:
-                TransitionsHeleper.startAcitivty(FabActivity.this, ButtonActivity.class, btn);
+                TransitionsHeleper.startActivity(FabActivity.this, ButtonActivity.class, btn);
                 break;
         }
     }

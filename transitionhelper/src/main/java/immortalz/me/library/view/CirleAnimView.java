@@ -111,8 +111,12 @@ public class CirleAnimView extends RenderView{
             startCircleAnim = false;
             setVisibility(GONE);
             //recycle
-            originalBitmap = null;
-            drawBitmap = null;
+            if (originalBitmap != null) {
+                originalBitmap = null;
+            }
+            if (drawBitmap != null) {
+                drawBitmap = null;
+            }
         }
     }
 

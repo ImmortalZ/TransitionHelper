@@ -3,6 +3,7 @@ package immortalz.me.transitionhelper.demo.image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -21,11 +22,12 @@ import immortalz.me.transitionhelper.base.BaseActivity;
 public class ImageDetailActivity extends BaseActivity {
     @Bind(R.id.iv_detail)
     ImageView ivDetail;
+    @Bind(R.id.tv)
+    TextView tv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         TransitionsHeleper.getInstance()
                 .setShowMethod(new ColorShowMethod(R.color.bg_teal_light,
                         R.color.bg_purple) {

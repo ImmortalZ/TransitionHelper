@@ -36,13 +36,14 @@ public class TransitionsHeleper {
 
     private static HashMap<String, InfoBean> staticMap = new HashMap<>();
 
-    private static ShowMethod showMethod = new NoneShowMethod();
+    private static ShowMethod showMethod;
 
 
     private TransitionsHeleper() {
     }
 
     public static TransitionsHeleper getInstance() {
+        showMethod = null;
         if (INSTANCE == null) {
             synchronized (TransitionsHeleper.class) {
                 if (INSTANCE == null) {
@@ -53,13 +54,36 @@ public class TransitionsHeleper {
         return INSTANCE;
     }
 
-    public static void startAcitivty(final Activity activity, final Class<?> cls, final View view) {
-        startAcitivty(activity, cls, view, 0);
+    public static void startActivity(Activity activity, Intent intent, View view) {
+        startActivity(activity, null, intent, view, 0);
     }
 
-    public static void startAcitivty(final Activity activity, final Class<?> cls, final View view, final Integer imgId) {
-        final Intent intent = new Intent(activity, cls);
+    public static void startActivity(Activity activity, Intent intent, View view, Integer imgId) {
+        startActivity(activity, null, intent, view, imgId);
+    }
+
+    public static void startActivity(Activity activity, Intent intent, View view, String imgUrl) {
+        startActivity(activity, null, intent, view, imgUrl);
+    }
+
+    public static void startActivity(final Activity activity, final Class<?> cls, final View view) {
+        startActivity(activity, cls, null, view, 0);
+    }
+
+    public static void startActivity(Activity activity, final Class<?> cls, View view, Integer imgId) {
+        startActivity(activity, cls, null, view, imgId);
+    }
+
+    public static void startActivity(Activity activity, final Class<?> cls, View view, String imgUrl) {
+        startActivity(activity, cls, null, view, imgUrl);
+    }
+
+    private static void startActivity(final Activity activity, final Class<?> cls, Intent intent, final View view, final Integer imgId) {
+        if (intent == null) {
+            intent = new Intent(activity, cls);
+        }
         final InfoBean bean = new InfoBean();
+        final Intent finalIntent = intent;
         view.post(new Runnable() {
             @Override
             public void run() {
@@ -75,17 +99,20 @@ public class TransitionsHeleper {
                 } else {
                     bean.setImgId(imgId);
                 }
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                staticMap.put(cls.getName(), bean);
-                activity.startActivity(intent);
-                activity.overridePendingTransition(0,0);
+                finalIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                staticMap.put(finalIntent.getComponent().getClassName(), bean);
+                activity.startActivity(finalIntent);
+                activity.overridePendingTransition(0, 0);
             }
         });
     }
 
-    public static void startAcitivty(final Activity activity, final Class<?> cls, final View view, final String imgUrl) {
-        final Intent intent = new Intent(activity, cls);
+    private static void startActivity(final Activity activity, final Class<?> cls, Intent intent, final View view, final String imgUrl) {
+        if (intent == null) {
+            intent = new Intent(activity, cls);
+        }
         final InfoBean bean = new InfoBean();
+        final Intent finalIntent = intent;
         view.post(new Runnable() {
             @Override
             public void run() {
@@ -101,9 +128,9 @@ public class TransitionsHeleper {
                 } else {
                     bean.setImgUrl(imgUrl);
                 }
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                staticMap.put(cls.getName(), bean);
-                activity.startActivity(intent);
+                finalIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                staticMap.put(finalIntent.getComponent().getClassName(), bean);
+                activity.startActivity(finalIntent);
                 activity.overridePendingTransition(0, 0);
             }
         });
@@ -114,6 +141,9 @@ public class TransitionsHeleper {
         final InfoBean bean = staticMap.get(activity.getClass().getName());
         if (bean == null) {
             return;
+        }
+        if (showMethod == null) {
+            showMethod = new NoneShowMethod();
         }
         final ViewGroup parent = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
         //if TranslucentStatus is true , statusBarHeight = 0
@@ -204,6 +234,9 @@ public class TransitionsHeleper {
             InfoBean bean = staticMap.get(activity.getClass().getName());
             if (bean.bitmap != null) {
                 bean.bitmap = null;
+            }
+            if (showMethod != null) {
+                showMethod = null;
             }
             staticMap.remove(activity.getClass().getName());
         }

@@ -17,6 +17,29 @@ API compatible with <b>Android 2.2+</b>
 
 **This is just a part of the usage,more usage,please to see demo.**
 
+
+### With Intent ###
+
+```java
+Intent intent = new Intent(this, IntentDetailActivity.class);
+        intent.putExtra(IntentDetailActivity.TRANSITION_DATA, "This is immortalZ");
+        TransitionsHeleper.startActivity(this, intent, btn);
+```
+
+>target Activity
+
+
+
+```java
+Intent intent = getIntent();
+        if (intent != null) {
+            tv.setText(intent.getStringExtra(TRANSITION_DATA));
+        }
+        TransitionsHeleper.getInstance()
+                .show(this, null);
+```
+
+
 ### With layout which you can add Customized ###
 
 ```java
@@ -137,7 +160,9 @@ dependencies {
 
 - [ ] To better support imageview
 
-- [ ] Back animation
+- [ ] Add Back animation
+
+- [ ] Add Animation Listener
 
 ##End
 

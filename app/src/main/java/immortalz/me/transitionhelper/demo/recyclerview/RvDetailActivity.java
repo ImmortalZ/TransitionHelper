@@ -47,7 +47,7 @@ public class RvDetailActivity extends BaseActivity {
                         Glide.with(RvDetailActivity.this)
                                 .load(bean.getImgUrl())
                                 .fitCenter()
-                                .into((ImageView) targetView);
+                                .into(targetView);
                     }
                 })
                 .show(this, ivDetail);

@@ -24,6 +24,6 @@ public class FActivity extends BaseActivity {
 
     @OnClick(R.id.btn_circle)
     public void onClick() {
-        TransitionsHeleper.startAcitivty(this, FDetailActivity.class, btnCommit);
+        TransitionsHeleper.startActivity(this, FDetailActivity.class, btnCommit);
     }
 }
