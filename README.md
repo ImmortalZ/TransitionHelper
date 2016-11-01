@@ -140,7 +140,7 @@ TransitionsHeleper.getInstance()
 
 ```java
 dependencies {
-   compile 'me.immortalz:transitionhelper:1.0.4'
+   compile 'me.immortalz:transitionhelper:1.0.5'
 }
 ```
 
