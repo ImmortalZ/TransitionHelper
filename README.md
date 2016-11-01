@@ -81,7 +81,7 @@ TransitionsHeleper.getInstance()
                 }).show(this, ivDetail);
 ```
 
-### Width Other View ,such as FloatingActionButton ###
+### With Other View ,such as FloatingActionButton ###
 
 ```java
 TransitionsHeleper.startAcitivty(FabActivity.this, FabCircleActivity.class, btnCircle);
@@ -136,6 +136,8 @@ dependencies {
 
 
 - [ ] To better support imageview
+
+- [ ] Back animation
 
 ##End
 
