@@ -30,6 +30,8 @@ public class InfoBean {
     public int windowWidth;
     public int windowHeight;
 
+    public float scalling;
+
 
     public String getImgUrl() {
         return imgUrl;

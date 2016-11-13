@@ -44,8 +44,8 @@ public abstract class ColorShowMethod extends ShowMethod {
         set.playTogether(
                 ObjectAnimator.ofFloat(child, "translationX", 0, -bean.translationX),
                 ObjectAnimator.ofFloat(child, "translationY", 0, -bean.translationY),
-                ObjectAnimator.ofFloat(child, "scaleX", 1),
-                ObjectAnimator.ofFloat(child, "scaleY", 1),
+                ObjectAnimator.ofFloat(child, "scaleX", 1 / bean.scalling),
+                ObjectAnimator.ofFloat(child, "scaleY", 1 / bean.scalling),
                 colorAnimator
         );
         set.setInterpolator(new AccelerateInterpolator());

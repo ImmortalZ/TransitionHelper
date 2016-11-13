@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -92,10 +93,10 @@ public class TransitionsHeleper {
                 bean.statusBarHeight = bean.originRect.top;
                 //get Origin View's rect
                 view.getGlobalVisibleRect(bean.originRect);
-                bean.originWidth = bean.originRect.right - bean.originRect.left;
-                bean.originHeight = bean.originRect.bottom - bean.originRect.top;
+                bean.originWidth = view.getWidth();
+                bean.originHeight = view.getHeight();
                 if (imgId == 0) {
-                    bean.bitmap = createBitmap(view, bean.originWidth, bean.originHeight);
+                    bean.bitmap = createBitmap(view, bean.originWidth, bean.originHeight, false);
                 } else {
                     bean.setImgId(imgId);
                 }
@@ -121,10 +122,10 @@ public class TransitionsHeleper {
                 bean.statusBarHeight = bean.originRect.top;
                 //get Origin View's rect
                 view.getGlobalVisibleRect(bean.originRect);
-                bean.originWidth = bean.originRect.right - bean.originRect.left;
-                bean.originHeight = bean.originRect.bottom - bean.originRect.top;
+                bean.originWidth = view.getWidth();
+                bean.originHeight = view.getHeight();
                 if (TextUtils.isEmpty(imgUrl)) {
-                    bean.bitmap = createBitmap(view, bean.originWidth, bean.originHeight);
+                    bean.bitmap = createBitmap(view, bean.originWidth, bean.originHeight, false);
                 } else {
                     bean.setImgUrl(imgUrl);
                 }
@@ -168,7 +169,7 @@ public class TransitionsHeleper {
                 final CirleAnimView cirleAnimView;
                 if (showMethod instanceof InflateShowMethod) {
                     cirleAnimView = new CirleAnimView(activity,
-                            createBitmap(((InflateShowMethod) showMethod).inflateView, bean.windowWidth, bean.windowHeight));
+                            createBitmap(((InflateShowMethod) showMethod).inflateView, bean.windowWidth, bean.windowHeight, true));
                 } else {
                     cirleAnimView = new CirleAnimView(activity);
                 }
@@ -201,21 +202,32 @@ public class TransitionsHeleper {
                         ivTemp.setBackgroundDrawable(new BitmapDrawable(bean.bitmap));
                     }
                 }
-                RelativeLayout.LayoutParams ivTempParams = new RelativeLayout.LayoutParams(bean.targetWidth,
-                        bean.targetHeight);
+                if (bean.originRect.top + bean.originHeight > (bean.windowHeight + bean.statusBarHeight + bean.titleHeight)) {
+                    bean.scalling = (float) (bean.windowHeight + bean.statusBarHeight
+                            + bean.titleHeight - bean.originRect.top) / bean.targetHeight;
+                } else {
+                    bean.scalling = (float) bean.originHeight / bean.targetHeight;
+                }
 
-                ivTempParams.setMargins(bean.originRect.left - (bean.targetWidth / 2 - bean.originWidth / 2)
-                        , bean.originRect.top - (parent.getTop() + bean.statusBarHeight) - (bean.targetHeight / 2 - bean.originHeight / 2), 0, 0);
+                RelativeLayout.LayoutParams ivTempParams = new RelativeLayout.LayoutParams((int) (bean.targetWidth * bean.scalling),
+                        (int) (bean.targetHeight * bean.scalling));
+                ivTempParams.setMargins((int) (bean.originRect.left + (bean.originWidth / 2 - bean.targetWidth * bean.scalling / 2))
+                        , bean.originRect.top - (parent.getTop() + bean.statusBarHeight), 0, 0);
+                bean.translationY = bean.originRect.top + (int) (bean.targetHeight * bean.scalling) / 2
+                        - bean.targetRect.top - bean.targetHeight / 2;
+                bean.translationX = bean.originRect.left + bean.originWidth / 2 - bean.targetRect.left - bean.targetWidth / 2;
+
+
                 cirleAnimView.addView(ivTemp, ivTempParams);
-                ivTemp.setScaleX((float) bean.originHeight / bean.targetHeight);
-                ivTemp.setScaleY((float) bean.originWidth / bean.targetWidth);
                 showMethod.translate(bean, cirleAnimView, ivTemp);
                 showMethod.loadCopyView(bean, ivTemp);
                 showMethod.set.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         cirleAnimView.startCircleAnim(bean);
-                        showMethod.loadTargetView(bean, targetView);
+                        if (showMethod != null && targetView != null) {
+                            showMethod.loadTargetView(bean, targetView);
+                        }
                     }
                 });
 
@@ -242,12 +254,47 @@ public class TransitionsHeleper {
         }
     }
 
-    private static Bitmap createBitmap(View view, int width, int height) {
-        view.setDrawingCacheEnabled(true);
-        view.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
-        view.buildDrawingCache();
-        return view.getDrawingCache();
-    }
 
+    private static Bitmap createBitmap(View view, int width, int height, boolean needOnLayout) {
+        Bitmap bitmap = null;
+        if (view != null) {
+            view.clearFocus();
+            view.setPressed(false);
+
+            boolean willNotCache = view.willNotCacheDrawing();
+            view.setWillNotCacheDrawing(false);
+
+            // Reset the drawing cache background color to fully transparent
+            // for the duration of this operation
+            int color = view.getDrawingCacheBackgroundColor();
+            view.setDrawingCacheBackgroundColor(0);
+            float alpha = view.getAlpha();
+            view.setAlpha(1.0f);
+
+            if (color != 0) {
+                view.destroyDrawingCache();
+            }
+
+            int widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
+            int heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
+            view.measure(widthSpec, heightSpec);
+            if (needOnLayout) {
+                view.layout(0, 0, width, height);
+            }
+            view.buildDrawingCache();
+            Bitmap cacheBitmap = view.getDrawingCache();
+            if (cacheBitmap == null) {
+                Log.e("view.ProcessImageToBlur", "failed getViewBitmap(" + view + ")",
+                        new RuntimeException());
+                return null;
+            }
+            bitmap = Bitmap.createBitmap(cacheBitmap);
+            // Restore the view
+            view.setAlpha(alpha);
+            view.destroyDrawingCache();
+            view.setWillNotCacheDrawing(willNotCache);
+            view.setDrawingCacheBackgroundColor(color);
+        }
+        return bitmap;
+    }
 }

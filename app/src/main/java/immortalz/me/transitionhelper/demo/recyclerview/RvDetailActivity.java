@@ -35,7 +35,7 @@ public class RvDetailActivity extends BaseActivity {
         TransitionsHeleper.getInstance()
                 .setShowMethod(new InflateShowMethod(this, R.layout.activity_rv_inflate) {
                     @Override
-                    public void loadCopyView(InfoBean bean, ImageView copyView) {
+                    public void loadCopyView(InfoBean bean, final ImageView copyView) {
                         Glide.with(RvDetailActivity.this)
                                 .load(bean.getImgUrl())
                                 .fitCenter()

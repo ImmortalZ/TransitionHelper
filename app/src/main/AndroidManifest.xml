@@ -38,6 +38,7 @@
         <activity android:name=".demo.fab.ButtonActivity" />
         <activity android:name=".demo.intent.IntentDetailActivity" />
         <activity android:name=".demo.intent.IntentActivity" />
+
     </application>
 
 </manifest>

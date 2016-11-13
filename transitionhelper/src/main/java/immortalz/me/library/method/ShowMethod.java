@@ -18,7 +18,7 @@ public abstract class ShowMethod {
     public AnimatorSet set = new AnimatorSet();
 
 
-    protected int duration = 500;
+    protected int duration = 480;
 
     public abstract void translate(InfoBean bean, RenderView parent, View child);
 

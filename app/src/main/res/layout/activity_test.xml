@@ -9,7 +9,7 @@
         android:id="@+id/btn"
         android:layout_width="200dp"
         android:layout_height="60dp" />
-    <View
+    <ImageView
         android:id="@+id/iv1"
         android:background="@drawable/bg_market"
         android:layout_width="100dp"

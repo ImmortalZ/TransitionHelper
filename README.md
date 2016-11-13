@@ -140,7 +140,7 @@ TransitionsHeleper.getInstance()
 
 ```java
 dependencies {
-   compile 'me.immortalz:transitionhelper:1.0.5'
+   compile 'me.immortalz:transitionhelper:1.0.6'
 }
 ```
 
@@ -150,7 +150,7 @@ dependencies {
 <dependency>
   <groupId>me.immortalz</groupId>
   <artifactId>transitionhelper</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
   <type>pom</type>
 </dependency>
 ```
