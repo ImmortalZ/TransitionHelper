@@ -3,6 +3,7 @@ package immortalz.me.transitionhelper.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import butterknife.ButterKnife;
 import immortalz.me.library.TransitionsHeleper;
@@ -23,11 +24,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract int getLayoutId();
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        TransitionsHeleper.onPause(this);
+    }
+
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        TransitionsHeleper.unBind(this);
         ButterKnife.unbind(this);
+        super.onDestroy();
+        Log.d("tag", "onDestroy");
     }
 
 }

@@ -8,13 +8,12 @@ import android.graphics.Rect;
  * email : mr_immortalz@qq.com
  */
 
-public class InfoBean {
+public class InfoBean<ModelType> {
     public int statusBarHeight;
     public int titleHeight;
     //image's url or resource id
-    private String imgUrl;
-    private int imgId;
     public Bitmap bitmap;
+    private ModelType load;
 
     public int translationY;
     public int translationX;
@@ -30,22 +29,13 @@ public class InfoBean {
     public int windowWidth;
     public int windowHeight;
 
-    public float scalling;
+    public float scale;
 
-
-    public String getImgUrl() {
-        return imgUrl;
+    public ModelType getLoad() {
+        return load;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-    public int getImgId() {
-        return imgId;
-    }
-
-    public void setImgId(int imgId) {
-        this.imgId = imgId;
+    public void setLoad(ModelType load) {
+        this.load = load;
     }
 }

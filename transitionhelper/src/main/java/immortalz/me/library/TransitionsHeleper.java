@@ -3,26 +3,32 @@ package immortalz.me.library;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
-import android.text.TextUtils;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import immortalz.me.library.bean.InfoBean;
+import immortalz.me.library.expose.CirleExposeView;
+import immortalz.me.library.expose.base.ExposeView;
+import immortalz.me.library.listener.ExposeListener;
+import immortalz.me.library.listener.TransitionListener;
 import immortalz.me.library.method.InflateShowMethod;
 import immortalz.me.library.method.NoneShowMethod;
 import immortalz.me.library.method.ShowMethod;
-import immortalz.me.library.view.CirleAnimView;
+import immortalz.me.library.util.BitmapUtils;
+
 
 /**
  * Created by Mr_immortalZ on 2016/10/18.
@@ -32,62 +38,116 @@ import immortalz.me.library.view.CirleAnimView;
 public class TransitionsHeleper {
 
 
-    private static TransitionsHeleper INSTANCE;
+    private static HashMap<String, InfoBean> sInfoMap = new HashMap<String, InfoBean>();
+    private static HashMap<String, WeakReference<TransitionsHeleper>> sTransitionMap = new HashMap<>();
+
+    private Activity activity;
+
+    private ShowMethod showMethod;
+
+    private TransitionListener transitionListener;
+
+    private int transitionDuration;
+
+    private ExposeView exposeView;
+
+    private int exposeColor;
+
+    private boolean useInflateExpose;
+
+    private View targetView;
 
 
-    private static HashMap<String, InfoBean> staticMap = new HashMap<>();
-
-    private static ShowMethod showMethod;
-
-
-    private TransitionsHeleper() {
+    private TransitionsHeleper(TransitionBuilder builder) {
+        activity = builder.activity;
+        showMethod = builder.showMethod;
+        exposeView = builder.exposeView;
+        exposeColor = builder.exposeColor;
+        useInflateExpose = builder.useInflateExpose;
+        transitionListener = builder.transitionListener;
+        transitionDuration = builder.transitionDuration;
+        targetView = builder.targetView;
+        sTransitionMap.put(activity.getClass().getName(), new WeakReference<TransitionsHeleper>(this));
     }
 
-    public static TransitionsHeleper getInstance() {
-        showMethod = null;
-        if (INSTANCE == null) {
-            synchronized (TransitionsHeleper.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TransitionsHeleper();
-                }
-            }
+
+    public static TransitionBuilder build(Activity activity) {
+        if (activity == null) {
+            throw new IllegalArgumentException("You cannot start a load on a null Activity");
         }
-        return INSTANCE;
+        return new TransitionBuilder(activity);
+    }
+
+    private static TransitionsHeleper create(TransitionBuilder builder) {
+        return new TransitionsHeleper(builder);
     }
 
     public static void startActivity(Activity activity, Intent intent, View view) {
-        startActivity(activity, null, intent, view, 0);
+        startActivity(activity, intent, view, null);
     }
 
-    public static void startActivity(Activity activity, Intent intent, View view, Integer imgId) {
-        startActivity(activity, null, intent, view, imgId);
+    public static void startActivity(Activity activity, Intent intent, View view, Object load) {
+        startEngine(activity, null, intent, view, load, false, -1, null, false, null);
     }
 
-    public static void startActivity(Activity activity, Intent intent, View view, String imgUrl) {
-        startActivity(activity, null, intent, view, imgUrl);
-    }
 
     public static void startActivity(final Activity activity, final Class<?> cls, final View view) {
-        startActivity(activity, cls, null, view, 0);
+        startActivity(activity, cls, view, null);
     }
 
-    public static void startActivity(Activity activity, final Class<?> cls, View view, Integer imgId) {
-        startActivity(activity, cls, null, view, imgId);
+    public static void startActivity(Activity activity, final Class<?> cls, View view, Object load) {
+        startEngine(activity, cls, null, view, load, false, -1, null, false, null);
     }
 
-    public static void startActivity(Activity activity, final Class<?> cls, View view, String imgUrl) {
-        startActivity(activity, cls, null, view, imgUrl);
+    //Activity ForResult
+    public static void startActivityForResult(Activity activity, Intent intent, int requestCode, Bundle options, View view) {
+        startActivityForResult(activity, intent, requestCode, options, view, null);
     }
 
-    private static void startActivity(final Activity activity, final Class<?> cls, Intent intent, final View view, final Integer imgId) {
+    public static void startActivityForResult(Activity activity, Intent intent, int requestCode, Bundle options, View view, Object load) {
+        startEngine(activity, null, intent, view, load, true, requestCode, options, false, null);
+    }
+
+    public static void startActivityForResult(Activity activity, Class<?> cls, int requestCode, Bundle options, View view) {
+        startActivityForResult(activity, cls, requestCode, options, view, null);
+    }
+
+    public static void startActivityForResult(Activity activity, Class<?> cls, int requestCode, Bundle options, View view, Object load) {
+        startEngine(activity, cls, null, view, load, true, requestCode, options, false, null);
+    }
+
+    //Fragment ForResult
+    public static void startActivityForResult(Fragment fragment, Intent intent, int requestCode, Bundle options, View view) {
+        startActivityForResult(fragment, intent, requestCode, options, view, null);
+    }
+
+    public static void startActivityForResult(Fragment fragment, Intent intent, int requestCode, Bundle options, View view, Object load) {
+        startEngine(fragment.getActivity(), null, intent, view, load, true, requestCode, options, true, fragment);
+    }
+
+    public static void startActivityForResult(Fragment fragment, Class<?> cls, int requestCode, Bundle options, View view) {
+        startActivityForResult(fragment, cls, requestCode, options, view, null);
+    }
+
+    public static void startActivityForResult(Fragment fragment, Class<?> cls, int requestCode, Bundle options, View view, Object load) {
+        startEngine(fragment.getActivity(), cls, null, view, load, true, requestCode, options, true, fragment);
+    }
+
+
+    private static void startEngine(final Activity activity, final Class<?> cls, Intent intent, final View view, final Object load,
+                                    final boolean isForResult, final int requestCode, final Bundle options,
+                                    final boolean isFragment, final Fragment fragment) {
         if (intent == null) {
             intent = new Intent(activity, cls);
         }
-        final InfoBean bean = new InfoBean();
+        if (view == null) {
+            throw new IllegalArgumentException("You cannot start a load on a null View");
+        }
         final Intent finalIntent = intent;
         view.post(new Runnable() {
             @Override
             public void run() {
+                InfoBean<Object> bean = new InfoBean<>();
                 //get statusBar height
                 view.getWindowVisibleDisplayFrame(bean.originRect);
                 bean.statusBarHeight = bean.originRect.top;
@@ -95,51 +155,40 @@ public class TransitionsHeleper {
                 view.getGlobalVisibleRect(bean.originRect);
                 bean.originWidth = view.getWidth();
                 bean.originHeight = view.getHeight();
-                if (imgId == 0) {
-                    bean.bitmap = createBitmap(view, bean.originWidth, bean.originHeight, false);
+                if (load == null) {
+                    bean.bitmap = BitmapUtils.createBitmap(view, bean.originWidth, bean.originHeight, false);
                 } else {
-                    bean.setImgId(imgId);
+                    if (load instanceof Integer || load instanceof String) {
+                        bean.setLoad(load);
+                    } else {
+                        bean.bitmap = BitmapUtils.createBitmap(view, bean.originWidth, bean.originHeight, false);
+                    }
                 }
                 finalIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                staticMap.put(finalIntent.getComponent().getClassName(), bean);
-                activity.startActivity(finalIntent);
-                activity.overridePendingTransition(0, 0);
+                sInfoMap.put(finalIntent.getComponent().getClassName(), bean);
+                if (!isForResult) {
+                    activity.startActivity(finalIntent);
+                } else {
+                    if (!isFragment) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            activity.startActivityForResult(finalIntent, requestCode, options);
+                        } else {
+                            activity.startActivityForResult(finalIntent, requestCode);
+                        }
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            fragment.startActivityForResult(finalIntent, requestCode, options);
+                        } else {
+                            fragment.startActivityForResult(finalIntent, requestCode);
+                        }
+                    }
+                }
             }
         });
     }
 
-    private static void startActivity(final Activity activity, final Class<?> cls, Intent intent, final View view, final String imgUrl) {
-        if (intent == null) {
-            intent = new Intent(activity, cls);
-        }
-        final InfoBean bean = new InfoBean();
-        final Intent finalIntent = intent;
-        view.post(new Runnable() {
-            @Override
-            public void run() {
-                //get statusBar height
-                view.getWindowVisibleDisplayFrame(bean.originRect);
-                bean.statusBarHeight = bean.originRect.top;
-                //get Origin View's rect
-                view.getGlobalVisibleRect(bean.originRect);
-                bean.originWidth = view.getWidth();
-                bean.originHeight = view.getHeight();
-                if (TextUtils.isEmpty(imgUrl)) {
-                    bean.bitmap = createBitmap(view, bean.originWidth, bean.originHeight, false);
-                } else {
-                    bean.setImgUrl(imgUrl);
-                }
-                finalIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                staticMap.put(finalIntent.getComponent().getClassName(), bean);
-                activity.startActivity(finalIntent);
-                activity.overridePendingTransition(0, 0);
-            }
-        });
-    }
-
-
-    public void show(final Activity activity, final ImageView targetView) {
-        final InfoBean bean = staticMap.get(activity.getClass().getName());
+    private void show() {
+        final InfoBean bean = sInfoMap.get(activity.getClass().getName());
         if (bean == null) {
             return;
         }
@@ -160,22 +209,24 @@ public class TransitionsHeleper {
                 bean.statusBarHeight = 0;
             }
         }
-        parent.post(new Runnable() {
+        showMethod.setShowDuration(transitionDuration);
+        //final ITransitionListener realTransitionListener = transitionListener.get();
+        Runnable r = new Runnable() {
             @Override
             public void run() {
                 bean.windowWidth = parent.getWidth();
                 bean.windowHeight = parent.getHeight();
                 bean.titleHeight = parent.getTop();
-                final CirleAnimView cirleAnimView;
-                if (showMethod instanceof InflateShowMethod) {
-                    cirleAnimView = new CirleAnimView(activity,
-                            createBitmap(((InflateShowMethod) showMethod).inflateView, bean.windowWidth, bean.windowHeight, true));
-                } else {
-                    cirleAnimView = new CirleAnimView(activity);
+                if (exposeView == null) {
+                    exposeView = new CirleExposeView(activity);
                 }
-                final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                if (showMethod instanceof InflateShowMethod) {
+                    exposeView.setInflateBitmap(BitmapUtils.createBitmap(((InflateShowMethod) showMethod).inflateView, bean.windowWidth, bean.windowHeight, true));
+                }
+                exposeView.setExposeColor(exposeColor, useInflateExpose);
+                final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
-                parent.addView(cirleAnimView, params);
+                parent.addView(exposeView, params);
 
 
                 if (targetView != null) {
@@ -203,98 +254,137 @@ public class TransitionsHeleper {
                     }
                 }
                 if (bean.originRect.top + bean.originHeight > (bean.windowHeight + bean.statusBarHeight + bean.titleHeight)) {
-                    bean.scalling = (float) (bean.windowHeight + bean.statusBarHeight
+                    bean.scale = (float) (bean.windowHeight + bean.statusBarHeight
                             + bean.titleHeight - bean.originRect.top) / bean.targetHeight;
                 } else {
-                    bean.scalling = (float) bean.originHeight / bean.targetHeight;
+                    bean.scale = (float) bean.originHeight / bean.targetHeight;
                 }
 
-                RelativeLayout.LayoutParams ivTempParams = new RelativeLayout.LayoutParams((int) (bean.targetWidth * bean.scalling),
-                        (int) (bean.targetHeight * bean.scalling));
-                ivTempParams.setMargins((int) (bean.originRect.left + (bean.originWidth / 2 - bean.targetWidth * bean.scalling / 2))
+                RelativeLayout.LayoutParams ivTempParams = new RelativeLayout.LayoutParams((int) (bean.targetWidth * bean.scale),
+                        (int) (bean.targetHeight * bean.scale));
+                ivTempParams.setMargins((int) (bean.originRect.left + (bean.originWidth / 2 - bean.targetWidth * bean.scale / 2))
                         , bean.originRect.top - (parent.getTop() + bean.statusBarHeight), 0, 0);
-                bean.translationY = bean.originRect.top + (int) (bean.targetHeight * bean.scalling) / 2
-                        - bean.targetRect.top - bean.targetHeight / 2;
+                bean.translationY = bean.originRect.top + (int) (bean.targetHeight * bean.scale) / 2 - bean.targetRect.top - bean.targetHeight / 2;
                 bean.translationX = bean.originRect.left + bean.originWidth / 2 - bean.targetRect.left - bean.targetWidth / 2;
 
-
-                cirleAnimView.addView(ivTemp, ivTempParams);
-                showMethod.translate(bean, cirleAnimView, ivTemp);
-                showMethod.loadCopyView(bean, ivTemp);
+                exposeView.addView(ivTemp, ivTempParams);
+                showMethod.reviseInfo(bean);
+                showMethod.translate(bean, exposeView, ivTemp);
+                showMethod.loadPlaceholder(bean, ivTemp);
                 showMethod.set.addListener(new AnimatorListenerAdapter() {
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        cirleAnimView.startCircleAnim(bean);
+                        exposeView.setExposeListener(new ExposeListener() {
+                            @Override
+                            public void onExposeStart() {
+                            }
+
+                            @Override
+                            public void onExposeEnd() {
+                                if (transitionListener != null) {
+                                    transitionListener.onExposeEnd();
+                                }
+                                //recycle
+                                if (exposeView != null) {
+                                    exposeView.stop();
+                                    exposeView = null;
+                                }
+                            }
+                        });
+                        exposeView.startExposeAnim(bean);
                         if (showMethod != null && targetView != null) {
                             showMethod.loadTargetView(bean, targetView);
                         }
                     }
                 });
 
+
             }
-        });
+        };
+        parent.post(r);
     }
 
 
-    public TransitionsHeleper setShowMethod(ShowMethod showMethod) {
-        this.showMethod = showMethod;
-        return this;
-    }
-
-    public static void unBind(Activity activity) {
-        if (staticMap.get(activity.getClass().getName()) != null) {
-            InfoBean bean = staticMap.get(activity.getClass().getName());
+    public static void onPause(Activity activity) {
+        if (sTransitionMap.get(activity.getClass().getName()) != null) {
+            WeakReference<TransitionsHeleper> weakT = sTransitionMap.get(activity.getClass().getName());
+            if (weakT != null && weakT.get() != null) {
+                if (weakT.get().exposeView != null) {
+                    weakT.get().exposeView.stop();
+                }
+            }
+        }
+        if (sInfoMap.get(activity.getClass().getName()) != null) {
+            InfoBean bean = sInfoMap.get(activity.getClass().getName());
             if (bean.bitmap != null) {
                 bean.bitmap = null;
             }
-            if (showMethod != null) {
-                showMethod = null;
-            }
-            staticMap.remove(activity.getClass().getName());
+            sInfoMap.remove(activity.getClass().getName());
         }
     }
 
+    public static class TransitionBuilder {
+        private Activity activity;
 
-    private static Bitmap createBitmap(View view, int width, int height, boolean needOnLayout) {
-        Bitmap bitmap = null;
-        if (view != null) {
-            view.clearFocus();
-            view.setPressed(false);
+        private ShowMethod showMethod;
 
-            boolean willNotCache = view.willNotCacheDrawing();
-            view.setWillNotCacheDrawing(false);
+        private TransitionListener transitionListener;
 
-            // Reset the drawing cache background color to fully transparent
-            // for the duration of this operation
-            int color = view.getDrawingCacheBackgroundColor();
-            view.setDrawingCacheBackgroundColor(0);
-            float alpha = view.getAlpha();
-            view.setAlpha(1.0f);
+        private int transitionDuration = ShowMethod.DEFALUT_DURATION;
 
-            if (color != 0) {
-                view.destroyDrawingCache();
-            }
+        private ExposeView exposeView;
 
-            int widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
-            int heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
-            view.measure(widthSpec, heightSpec);
-            if (needOnLayout) {
-                view.layout(0, 0, width, height);
-            }
-            view.buildDrawingCache();
-            Bitmap cacheBitmap = view.getDrawingCache();
-            if (cacheBitmap == null) {
-                Log.e("view.ProcessImageToBlur", "failed getViewBitmap(" + view + ")",
-                        new RuntimeException());
-                return null;
-            }
-            bitmap = Bitmap.createBitmap(cacheBitmap);
-            // Restore the view
-            view.setAlpha(alpha);
-            view.destroyDrawingCache();
-            view.setWillNotCacheDrawing(willNotCache);
-            view.setDrawingCacheBackgroundColor(color);
+        private int exposeColor;
+
+        private boolean useInflateExpose;
+
+        private View targetView;
+
+        public TransitionBuilder(Activity activity) {
+            this.activity = activity;
         }
-        return bitmap;
+
+        public TransitionBuilder setExposeView(ExposeView exposeView) {
+            this.exposeView = exposeView;
+            return this;
+        }
+
+        public TransitionBuilder setExposeColor(int exposeColor) {
+            return setExposeColor(exposeColor, false);
+        }
+
+        public TransitionBuilder setExposeColor(int exposeColor, boolean useInflateExpose) {
+            this.exposeColor = exposeColor;
+            this.useInflateExpose = useInflateExpose;
+            return this;
+        }
+
+        public TransitionBuilder setShowMethod(ShowMethod showMethod) {
+            this.showMethod = showMethod;
+            return this;
+        }
+
+        public TransitionBuilder intoTargetView(View targetView) {
+            this.targetView = targetView;
+            return this;
+        }
+
+        public TransitionBuilder setTransitionDuration(int transitionDuration) {
+            this.transitionDuration = Math.max(transitionDuration, 0);
+            return this;
+        }
+
+        public TransitionBuilder setTransitionListener(TransitionListener transitionListener) {
+            this.transitionListener = transitionListener;
+            return this;
+        }
+
+        public void show() {
+            TransitionsHeleper t = TransitionsHeleper.create(this);
+            t.show();
+        }
+
     }
+
 }

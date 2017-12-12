@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_go"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/tv"
+        android:background="@color/bg_yellow"
+        android:text="Button"
+        android:textColor="@color/bg_white"/>
+</RelativeLayout>

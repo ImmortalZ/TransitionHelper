@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
 import immortalz.me.library.bean.InfoBean;
-import immortalz.me.library.view.RenderView;
+import immortalz.me.library.expose.base.ExposeView;
 
 
 /**
@@ -24,15 +24,15 @@ public abstract class InflateShowMethod extends ShowMethod {
     }
 
     @Override
-    public void translate(InfoBean bean, RenderView parent, View child) {
+    public void translate(InfoBean bean, ExposeView parent, View child) {
         set.playTogether(
                 ObjectAnimator.ofFloat(child, "translationX", 0, -bean.translationX),
                 ObjectAnimator.ofFloat(child, "translationY", 0, -bean.translationY),
-                ObjectAnimator.ofFloat(child, "scaleX", 1,1/bean.scalling),
-                ObjectAnimator.ofFloat(child, "scaleY", 1,1/bean.scalling)
+                ObjectAnimator.ofFloat(child, "scaleX", 1,1/bean.scale),
+                ObjectAnimator.ofFloat(child, "scaleY", 1,1/bean.scale)
         );
         set.setInterpolator(new AccelerateInterpolator());
-        set.setDuration(duration).start();
+        set.setDuration(showDuration).start();
     }
 
 }

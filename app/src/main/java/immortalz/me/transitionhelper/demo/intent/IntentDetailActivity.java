@@ -28,8 +28,8 @@ public class IntentDetailActivity extends BaseActivity {
         if (intent != null) {
             tv.setText(intent.getStringExtra(TRANSITION_DATA));
         }
-        TransitionsHeleper.getInstance()
-                .show(this, null);
+        TransitionsHeleper.build(this)
+                .show();
     }
 
 

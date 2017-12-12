@@ -1,23 +1,25 @@
 # TransitionHelper
 
-This is a **simple** util to create Activity transition animation
+这是一个简单的Activity转场动画 工具类
 
 API compatible with <b>Android 2.2+</b>
 
 
-[中文说明](README_zh_CN.md)
-
-##Screenshots
+##截图
 
 <img src="screenshots/image.gif" width="180" height="320">
 <img src="screenshots/recyclerview.gif" width="180" height="320">
 <img src="screenshots/button.gif" width="180" height="320">
 <img src="screenshots/fab.gif" width="180" height="320">
-## How to use
-**1.startActivity**
+
+## 怎么使用
+
+>更多使用，请查看demo
+
+**1.首先在跳转的Activity中**
 > TransitionsHeleper.startActivity(this, ImageDetailActivity.class, view, load);
 
-**2. in target Activity**
+**2. 在目标Activity/Fragment中的onCreate中**
 ```
     TransitionsHeleper.build(this)
                 .setShowMethod(new ColorShowMethod(R.color.bg_teal_light, R.color.bg_purple) {
@@ -43,7 +45,7 @@ API compatible with <b>Android 2.2+</b>
                 .show();
 ```
 
-**3. unbind this**
+**3. 为了避免内存泄漏，及时回收相关变量，在onPause中**
 ```
     @Override
     protected void onPause() {
@@ -52,14 +54,14 @@ API compatible with <b>Android 2.2+</b>
     }
 ```
 ##API
-| name                      | description      
+| 名字                      | 描述备注      
 | ------------------------- | ------- 
-| setExposeView              | CirleExposeView，FoldExposeView（you can custom others by extends ExposeView）  
-| setExposeColor     |    if not set , will be transparent color
-| setShowMethod    | NoneShowMethod(Default),ColorShowMethod,InflateShowMethod（you can custom others by extends ShowMethod） 
-| intoTargetView  |  
-| setTransitionDuration |  
-| setTransitionListener           | 
+| setExposeView              | 支持CirleExposeView，FoldExposeView（你可以通过继承ExposeView来自定义需要的揭露动画）  
+| setExposeColor     |    设置揭露动画的颜色，如果不设置就是透明，**推荐设置**
+| setShowMethod    |  NoneShowMethod(默认),ColorShowMethod,InflateShowMethod（你可以通过继承ShowMethod来自定义需要的展示过渡方法） 
+| intoTargetView  |  通过设置这个，在回调loadTargetView中使用
+| setTransitionDuration |  设置转场动画时间
+| setTransitionListener           | 设置转场动画监听
 
 
 
@@ -97,15 +99,15 @@ dependencies {
 ##End
 
 
-Welcome to perfect this library .
+限于本人能力和精力，还是有许多地方需要完善的，欢迎大家一起来完善！
 
 ##Contact
 
-WeChat
+微信公众号
 
 ![这里写图片描述](http://img.blog.csdn.net/20161007100121713)
 
-WeiBo：
+我的微博：
 
 [http://weibo.com/u/1956502961](http://weibo.com/u/1956502961)
 

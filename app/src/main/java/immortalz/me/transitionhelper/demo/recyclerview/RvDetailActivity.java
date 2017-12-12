@@ -1,6 +1,7 @@
 package immortalz.me.transitionhelper.demo.recyclerview;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -32,24 +33,26 @@ public class RvDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TransitionsHeleper.getInstance()
+        TransitionsHeleper.build(this)
                 .setShowMethod(new InflateShowMethod(this, R.layout.activity_rv_inflate) {
                     @Override
-                    public void loadCopyView(InfoBean bean, final ImageView copyView) {
+                    public void loadPlaceholder(InfoBean bean, ImageView placeholder) {
                         Glide.with(RvDetailActivity.this)
-                                .load(bean.getImgUrl())
+                                .load(bean.getLoad())
                                 .fitCenter()
-                                .into(copyView);
+                                .into(placeholder);
                     }
 
                     @Override
-                    public void loadTargetView(InfoBean bean, ImageView targetView) {
+                    public void loadTargetView(InfoBean bean, View targetView) {
                         Glide.with(RvDetailActivity.this)
-                                .load(bean.getImgUrl())
+                                .load(bean.getLoad())
                                 .fitCenter()
-                                .into(targetView);
+                                .into((ImageView) targetView);
                     }
                 })
-                .show(this, ivDetail);
+                .setExposeColor(getResources().getColor(R.color.bg_teal))
+                .intoTargetView(ivDetail)
+                .show();
     }
 }

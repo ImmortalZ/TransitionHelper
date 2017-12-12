@@ -2,6 +2,7 @@ package immortalz.me.transitionhelper.demo.image;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,26 +29,28 @@ public class ImageDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TransitionsHeleper.getInstance()
-                .setShowMethod(new ColorShowMethod(R.color.bg_teal_light,
-                        R.color.bg_purple) {
+        TransitionsHeleper.build(this)
+                .setShowMethod(new ColorShowMethod(R.color.bg_teal_light, R.color.bg_purple) {
                     @Override
-                    public void loadCopyView(InfoBean bean, ImageView copyView) {
+                    public void loadPlaceholder(InfoBean bean, ImageView placeholder) {
                         Glide.with(ImageDetailActivity.this)
-                                .load(bean.getImgUrl())
+                                .load(bean.getLoad())
                                 .centerCrop()
-                                .into(copyView);
+                                .into(placeholder);
                     }
 
                     @Override
-                    public void loadTargetView(InfoBean bean, ImageView targetView) {
+                    public void loadTargetView(InfoBean bean, View targetView) {
                         Glide.with(ImageDetailActivity.this)
-                                .load(bean.getImgUrl())
+                                .load(bean.getLoad())
                                 .centerCrop()
-                                .into(targetView);
+                                .into((ImageView) targetView);
+                        tv.setText("immortalz");
                     }
-
-                }).show(this, ivDetail);
+                })
+                .setExposeColor(getResources().getColor(R.color.bg_purple))
+                .intoTargetView(ivDetail)
+                .show();
     }
 
     @Override

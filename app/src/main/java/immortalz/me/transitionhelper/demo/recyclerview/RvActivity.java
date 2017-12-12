@@ -23,7 +23,7 @@ public class RvActivity extends BaseActivity {
     RecyclerView rv;
     private List<String> mList;
     private RvAdapter mAdapter;
-    String imgUrl = "http://avatar.csdn.net/6/1/B/1_mr_immortalz.jpg";
+    String imgUrl = "https://avatars1.githubusercontent.com/u/14830574?s=460&v=4";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

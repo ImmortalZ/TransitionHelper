@@ -40,4 +40,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="Intent" />
+    <Button
+        android:id="@+id/btn_for_result"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/startactivityforresult" />
 </LinearLayout>

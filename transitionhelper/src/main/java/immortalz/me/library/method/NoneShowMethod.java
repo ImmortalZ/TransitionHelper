@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import immortalz.me.library.R;
 import immortalz.me.library.bean.InfoBean;
-import immortalz.me.library.view.RenderView;
+import immortalz.me.library.expose.base.ExposeView;
 
 
 /**
@@ -18,33 +18,33 @@ import immortalz.me.library.view.RenderView;
 
 public  class NoneShowMethod extends ShowMethod {
 
-    protected int startColor;
-    protected int endColor;
+    public int startColor;
+    public int endColor;
 
     @Override
-    public void translate(InfoBean bean, RenderView parent, View child) {
+    public void translate(InfoBean bean, ExposeView parent, View child) {
 
-        startColor = parent.getResources().getColor(R.color.showmethod_start_color);
-        endColor = parent.getResources().getColor(R.color.showmethod_end_color);
+        startColor = parent.getResources().getColor(R.color.transitionhelper_showmethod_start_color);
+        endColor = parent.getResources().getColor(R.color.transitionhelper_showmethod_end_color);
 
         set.setInterpolator(new AccelerateInterpolator());
-        set.setDuration(duration).start();
+        set.setDuration(showDuration).start();
     }
 
     @Override
-    public void loadCopyView(InfoBean bean, ImageView copyView) {
+    public void loadPlaceholder(InfoBean bean, ImageView placeholder) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-                ObjectAnimator.ofFloat(copyView,"rotation",0,180),
-                ObjectAnimator.ofFloat(copyView, "scaleX", 1, 0),
-                ObjectAnimator.ofFloat(copyView, "scaleY", 1, 0)
+                ObjectAnimator.ofFloat(placeholder,"rotation",0,180),
+                ObjectAnimator.ofFloat(placeholder, "scaleX", 1, 0),
+                ObjectAnimator.ofFloat(placeholder, "scaleY", 1, 0)
         );
         set.setInterpolator(new AccelerateInterpolator());
-        set.setDuration(duration / 4 * 5).start();
+        set.setDuration(showDuration / 4 * 5).start();
     }
 
     @Override
-    public void loadTargetView(InfoBean bean, ImageView targetView) {
+    public void loadTargetView(InfoBean bean, View targetView) {
 
     }
 

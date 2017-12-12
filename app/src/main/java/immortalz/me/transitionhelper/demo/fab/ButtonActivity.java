@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 
@@ -28,26 +29,26 @@ public class ButtonActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TransitionsHeleper.getInstance()
+        TransitionsHeleper.build(this)
                 .setShowMethod(new ColorShowMethod(R.color.bg_purple, R.color.bg_teal) {
                     @Override
-                    public void loadCopyView(InfoBean bean, ImageView copyView) {
+                    public void loadPlaceholder(InfoBean bean, ImageView placeholder) {
                         AnimatorSet set = new AnimatorSet();
                         set.playTogether(
-                                ObjectAnimator.ofFloat(copyView, "alpha", 1f, 0f),
-                                ObjectAnimator.ofFloat(copyView, "scaleX", 1.5f, 1f),
-                                ObjectAnimator.ofFloat(copyView, "scaleY", 1.5f, 1f)
+                                ObjectAnimator.ofFloat(placeholder, "alpha", 1f, 0f),
+                                ObjectAnimator.ofFloat(placeholder, "scaleX", 1.5f, 1f),
+                                ObjectAnimator.ofFloat(placeholder, "scaleY", 1.5f, 1f)
                         );
                         set.setInterpolator(new AccelerateInterpolator());
-                        set.setDuration(duration / 4 * 5).start();
+                        set.setDuration(showDuration / 4 * 5).start();
                     }
 
                     @Override
-                    public void loadTargetView(InfoBean bean, ImageView targetView) {
+                    public void loadTargetView(InfoBean bean, View targetView) {
 
                     }
-
                 })
-                .show(this, null);
+                .setExposeColor(getResources().getColor(R.color.bg_teal))
+                .show();
     }
 }

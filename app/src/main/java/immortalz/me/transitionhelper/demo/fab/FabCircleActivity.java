@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 
@@ -12,6 +13,8 @@ import immortalz.me.library.bean.InfoBean;
 import immortalz.me.library.method.ColorShowMethod;
 import immortalz.me.transitionhelper.R;
 import immortalz.me.transitionhelper.base.BaseActivity;
+
+import static android.R.attr.duration;
 
 /**
  * Created by Mr_immortalZ on 2016/10/29.
@@ -23,28 +26,27 @@ public class FabCircleActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TransitionsHeleper.getInstance()
+        TransitionsHeleper.build(this)
                 .setShowMethod(new ColorShowMethod(R.color.bg_purple,R.color.bg_teal) {
                     @Override
-                    public void loadCopyView(InfoBean bean, ImageView copyView) {
+                    public void loadPlaceholder(InfoBean bean, ImageView placeholder) {
                         AnimatorSet set = new AnimatorSet();
                         set.playTogether(
-                                ObjectAnimator.ofFloat(copyView,"rotation",0,180),
-                                ObjectAnimator.ofFloat(copyView, "scaleX", 1, 0),
-                                ObjectAnimator.ofFloat(copyView, "scaleY", 1, 0)
+                                ObjectAnimator.ofFloat(placeholder,"rotation",0,180),
+                                ObjectAnimator.ofFloat(placeholder, "scaleX", 1, 0),
+                                ObjectAnimator.ofFloat(placeholder, "scaleY", 1, 0)
                         );
                         set.setInterpolator(new AccelerateInterpolator());
-                        set.setDuration(duration / 4 * 5).start();
+                        set.setDuration(showDuration / 4 * 5).start();
                     }
 
                     @Override
-                    public void loadTargetView(InfoBean bean, ImageView targetView) {
+                    public void loadTargetView(InfoBean bean, View targetView) {
 
                     }
-
-
                 })
-                .show(this,null);
+                .setExposeColor(getResources().getColor(R.color.bg_teal))
+                .show();
     }
 
     @Override

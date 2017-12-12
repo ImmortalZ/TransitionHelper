@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import immortalz.me.library.bean.InfoBean;
-import immortalz.me.library.view.RenderView;
+import immortalz.me.library.expose.base.ExposeView;
 
 
 /**
@@ -17,21 +17,29 @@ public abstract class ShowMethod {
 
     public AnimatorSet set = new AnimatorSet();
 
+    public static final int DEFALUT_DURATION = 480;
 
-    protected int duration = 480;
+    public int showDuration = DEFALUT_DURATION;
 
-    public abstract void translate(InfoBean bean, RenderView parent, View child);
+    public abstract void translate(InfoBean bean, ExposeView parent, View child);
+
+    public void reviseInfo(InfoBean info) {
+
+    }
 
     /**
-     * load copyView which just a temp view.
-     * the copyView is show when it's translating.
+     * load placeholder which just a temp view.
+     * the placeholder is show when it's translating.
      */
-    public abstract void loadCopyView(InfoBean bean,ImageView copyView);
+    public abstract void loadPlaceholder(InfoBean bean, ImageView placeholder);
 
     /**
      * load targetView
      */
-    public void loadTargetView(InfoBean bean, ImageView targetView){
+    public abstract void loadTargetView(InfoBean bean, View targetView);
 
+
+    public void setShowDuration(int showDuration) {
+        this.showDuration = showDuration;
     }
 }

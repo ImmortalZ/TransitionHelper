@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.novoda.bintray-release'
 // This is the library version used when deploying the artifact
-version = "1.0.6"
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
@@ -26,75 +24,14 @@ android {
 
 }
 
-
+publish {
+    userOrg = 'immortalzgt'      //bintray注册的用户名
+    groupId = 'me.immortalz'         //compile引用时的第1部分groupId
+    artifactId = 'transitionhelper'     //compile引用时的第2部分项目名
+    publishVersion = '2.1.0'    //compile引用时的第3部分版本号
+    desc = 'This is a transition library '
+    website = 'https://github.com/ImmortalZ/TransitionHelper'
+}
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-}
-
-def siteUrl = 'https://github.com/immortalz'
-def gitUrl = 'https://github.com/ImmortalZ/TransitionHelper'
-group = "me.immortalz"                                        // Maven Group ID for the artifact，一般填你唯一的包名
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                // Add your description here
-                name 'Android TransitionHelper'
-                url siteUrl
-                // Set your license
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'immortalz'
-                        name 'immortalz'
-                        email 'immortalz.cn@gmail.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        userOrg = 'immortalzme'
-        repo = "maven"
-        name = "transitionhelper"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
+    compile 'com.android.support:support-v4:24.2.0'
 }

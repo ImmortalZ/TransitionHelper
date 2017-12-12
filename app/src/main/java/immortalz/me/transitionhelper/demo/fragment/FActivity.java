@@ -26,4 +26,5 @@ public class FActivity extends BaseActivity {
     public void onClick() {
         TransitionsHeleper.startActivity(this, FDetailActivity.class, btnCommit);
     }
+
 }

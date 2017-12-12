@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TransitionHelper</string>
+    <string name="startactivityforresult">startActivityForResult</string>
 </resources>
