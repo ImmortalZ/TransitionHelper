@@ -5,7 +5,7 @@
 API compatible with <b>Android 2.2+</b>
 
 
-##截图
+## 截图
 
 <img src="screenshots/image.gif" width="180" height="320">
 <img src="screenshots/recyclerview.gif" width="180" height="320">
@@ -53,7 +53,9 @@ API compatible with <b>Android 2.2+</b>
         TransitionsHeleper.onPause(this);
     }
 ```
-##API
+
+## API
+
 | 名字                      | 描述备注      
 | ------------------------- | ------- 
 | setExposeView              | 支持CirleExposeView，FoldExposeView（你可以通过继承ExposeView来自定义需要的揭露动画）  
@@ -65,7 +67,7 @@ API compatible with <b>Android 2.2+</b>
 
 
 
-##Quick start
+## Quick start
 
 
 **Gradle**
@@ -87,7 +89,7 @@ dependencies {
 </dependency>
 ```
 
-##TODO
+## TODO
 
 
 - [ ] To better support imageview
@@ -96,12 +98,12 @@ dependencies {
 
 - [x] Add Animation Listener
 
-##End
+## End
 
 
 限于本人能力和精力，还是有许多地方需要完善的，欢迎大家一起来完善！
 
-##Contact
+## Contact
 
 微信公众号
 

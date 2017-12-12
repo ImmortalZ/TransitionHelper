@@ -7,13 +7,15 @@ API compatible with <b>Android 2.2+</b>
 
 [中文说明](README_zh_CN.md)
 
-##Screenshots
+## Screenshots
 
 <img src="screenshots/image.gif" width="180" height="320">
 <img src="screenshots/recyclerview.gif" width="180" height="320">
 <img src="screenshots/button.gif" width="180" height="320">
 <img src="screenshots/fab.gif" width="180" height="320">
+
 ## How to use
+
 **1.startActivity**
 > TransitionsHeleper.startActivity(this, ImageDetailActivity.class, view, load);
 
@@ -51,7 +53,9 @@ API compatible with <b>Android 2.2+</b>
         TransitionsHeleper.onPause(this);
     }
 ```
-##API
+
+## API
+
 | name                      | description      
 | ------------------------- | ------- 
 | setExposeView              | CirleExposeView，FoldExposeView（you can custom others by extends ExposeView）  
@@ -63,7 +67,7 @@ API compatible with <b>Android 2.2+</b>
 
 
 
-##Quick start
+## Quick start
 
 
 **Gradle**
@@ -85,7 +89,7 @@ dependencies {
 </dependency>
 ```
 
-##TODO
+## TODO
 
 
 - [ ] To better support imageview
@@ -94,12 +98,12 @@ dependencies {
 
 - [x] Add Animation Listener
 
-##End
+## End
 
 
 Welcome to perfect this library .
 
-##Contact
+## Contact
 
 WeChat
 
