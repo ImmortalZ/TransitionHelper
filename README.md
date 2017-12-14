@@ -74,7 +74,7 @@ API compatible with <b>Android 2.2+</b>
 
 ```java
 dependencies {
-   compile 'me.immortalz:transitionhelper:2.1.0'
+   compile 'me.immortalz:transitionhelper:2.2.0'
 }
 ```
 
@@ -84,7 +84,7 @@ dependencies {
 <dependency>
   <groupId>me.immortalz</groupId>
   <artifactId>transitionhelper</artifactId>
-  <version>2.1.0</version>
+  <version>2.2.0</version>
   <type>pom</type>
 </dependency>
 ```
@@ -97,6 +97,18 @@ dependencies {
 - [ ] Add Back animation
 
 - [x] Add Animation Listener
+
+## Update record
+
+**v2.2**
+
+- Repair because of the constant clicks leading to OOM 
+- Add more listener
+
+**v2.1**
+
+- Repair caused memory leaks because of misuse
+- Add more Animation
 
 ## End
 

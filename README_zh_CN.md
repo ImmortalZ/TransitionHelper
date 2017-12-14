@@ -74,7 +74,7 @@ API compatible with <b>Android 2.2+</b>
 
 ```java
 dependencies {
-   compile 'me.immortalz:transitionhelper:2.1.0'
+   compile 'me.immortalz:transitionhelper:2.2.0'
 }
 ```
 
@@ -84,7 +84,7 @@ dependencies {
 <dependency>
   <groupId>me.immortalz</groupId>
   <artifactId>transitionhelper</artifactId>
-  <version>2.1.0</version>
+  <version>2.2.0</version>
   <type>pom</type>
 </dependency>
 ```
@@ -97,6 +97,19 @@ dependencies {
 - [ ] Add Back animation
 
 - [x] Add Animation Listener
+
+## 更新记录
+
+**v2.2**
+
+- 修复一直不断的打开新的Activity/Fragment导致OOM 
+- 添加更多的expose监听
+
+**v2.1**
+
+- Repair caused memory leaks because of misuse
+- 添加更多的expose动画 -- FoldExposeView
+- 更多细节优化
 
 ## End
 

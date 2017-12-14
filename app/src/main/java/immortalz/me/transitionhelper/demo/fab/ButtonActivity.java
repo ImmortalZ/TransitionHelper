@@ -1,5 +1,7 @@
 package immortalz.me.transitionhelper.demo.fab;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
@@ -40,6 +42,12 @@ public class ButtonActivity extends BaseActivity {
                                 ObjectAnimator.ofFloat(placeholder, "scaleY", 1.5f, 1f)
                         );
                         set.setInterpolator(new AccelerateInterpolator());
+                        set.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+                                super.onAnimationCancel(animation);
+                            }
+                        });
                         set.setDuration(showDuration / 4 * 5).start();
                     }
 

@@ -8,5 +8,7 @@ package immortalz.me.library.listener;
 public interface ExposeListener {
     void onExposeStart();
 
+    void onExposeProgrees(float progress);
+
     void onExposeEnd();
 }

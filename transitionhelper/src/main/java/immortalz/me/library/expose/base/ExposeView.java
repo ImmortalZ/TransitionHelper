@@ -111,6 +111,9 @@ public abstract class ExposeView extends FrameLayout {
 
     private void exposeDraw(Canvas canvas) {
         if (exposeWidth < maxExposeWidth) {
+            if (mExposeListener != null) {
+                mExposeListener.onExposeProgrees((float) exposeWidth / maxExposeWidth);
+            }
             if (useInflateExpose && inflateBitmap != null) {
                 exposeCanvas.drawBitmap(inflateBitmap, null, new RectF(0, 0, screenWidth, screenHeight), null);
             } else {
@@ -148,6 +151,7 @@ public abstract class ExposeView extends FrameLayout {
             inflateBitmap.recycle();
             inflateBitmap = null;
         }
+        System.gc();
     }
 
     public void setInflateBitmap(Bitmap inflateBitmap) {

@@ -3,11 +3,11 @@ package immortalz.me.library;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -278,6 +278,16 @@ public class TransitionsHeleper {
                         exposeView.setExposeListener(new ExposeListener() {
                             @Override
                             public void onExposeStart() {
+                                if (transitionListener != null) {
+                                    transitionListener.onExposeStart();
+                                }
+                            }
+
+                            @Override
+                            public void onExposeProgrees(float progress) {
+                                if (transitionListener != null) {
+                                    transitionListener.onExposeProgress(progress);
+                                }
                             }
 
                             @Override
@@ -288,6 +298,8 @@ public class TransitionsHeleper {
                                 //recycle
                                 if (exposeView != null) {
                                     exposeView.stop();
+                                    exposeView.removeAllViews();
+                                    parent.removeView(exposeView);
                                     exposeView = null;
                                 }
                             }
@@ -312,6 +324,10 @@ public class TransitionsHeleper {
             if (weakT != null && weakT.get() != null) {
                 if (weakT.get().exposeView != null) {
                     weakT.get().exposeView.stop();
+                    weakT.get().exposeView.removeAllViews();
+                    if (weakT.get().exposeView.getParent() != null) {
+                        ((ViewGroup) weakT.get().exposeView.getParent()).removeView(weakT.get().exposeView);
+                    }
                 }
             }
         }

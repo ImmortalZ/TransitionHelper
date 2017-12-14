@@ -6,5 +6,9 @@ package immortalz.me.library.listener;
  */
 
 public interface TransitionListener {
+    void onExposeStart();
+
+    void onExposeProgress(float progress);
+
     void onExposeEnd();
 }
