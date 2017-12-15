@@ -28,7 +28,7 @@ publish {
     userOrg = 'immortalzgt'      //bintray注册的用户名
     groupId = 'me.immortalz'         //compile引用时的第1部分groupId
     artifactId = 'transitionhelper'     //compile引用时的第2部分项目名
-    publishVersion = '2.2.0'    //compile引用时的第3部分版本号
+    publishVersion = '2.2.1'    //compile引用时的第3部分版本号
     desc = 'This is a transition library '
     website = 'https://github.com/ImmortalZ/TransitionHelper'
 }

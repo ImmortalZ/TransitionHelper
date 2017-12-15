@@ -151,7 +151,6 @@ public abstract class ExposeView extends FrameLayout {
             inflateBitmap.recycle();
             inflateBitmap = null;
         }
-        System.gc();
     }
 
     public void setInflateBitmap(Bitmap inflateBitmap) {
