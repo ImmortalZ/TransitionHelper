@@ -28,12 +28,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        TransitionsHeleper.unbind(this);
     }
 
     @Override
     protected void onDestroy() {
         ButterKnife.unbind(this);
+        TransitionsHeleper.unbind(this);
         super.onDestroy();
         Log.d("tag", "onDestroy");
     }
