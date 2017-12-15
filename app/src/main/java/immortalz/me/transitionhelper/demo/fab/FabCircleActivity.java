@@ -14,8 +14,6 @@ import immortalz.me.library.method.ColorShowMethod;
 import immortalz.me.transitionhelper.R;
 import immortalz.me.transitionhelper.base.BaseActivity;
 
-import static android.R.attr.duration;
-
 /**
  * Created by Mr_immortalZ on 2016/10/29.
  * email : mr_immortalz@qq.com
@@ -27,17 +25,18 @@ public class FabCircleActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TransitionsHeleper.build(this)
-                .setShowMethod(new ColorShowMethod(R.color.bg_purple,R.color.bg_teal) {
+                .setShowMethod(new ColorShowMethod(R.color.bg_purple, R.color.bg_teal) {
                     @Override
                     public void loadPlaceholder(InfoBean bean, ImageView placeholder) {
                         AnimatorSet set = new AnimatorSet();
                         set.playTogether(
-                                ObjectAnimator.ofFloat(placeholder,"rotation",0,180),
+                                ObjectAnimator.ofFloat(placeholder, "rotation", 0, 180),
                                 ObjectAnimator.ofFloat(placeholder, "scaleX", 1, 0),
                                 ObjectAnimator.ofFloat(placeholder, "scaleY", 1, 0)
                         );
                         set.setInterpolator(new AccelerateInterpolator());
                         set.setDuration(showDuration / 4 * 5).start();
+                        //placeholder.setVisibility(View.GONE);
                     }
 
                     @Override

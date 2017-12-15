@@ -28,7 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        TransitionsHeleper.onPause(this);
+        TransitionsHeleper.unbind(this);
     }
 
     @Override

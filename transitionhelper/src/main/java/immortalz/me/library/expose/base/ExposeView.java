@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Xfermode;
+import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 import immortalz.me.library.R;
@@ -37,6 +38,7 @@ public abstract class ExposeView extends FrameLayout {
     protected int startExposeX;
     protected int startExposeY;
     private int exposeSpeed = 5;
+    private int exposeAcceleration = 7;
     private int exposeColor = getResources().getColor(R.color.transitionhelper_showmethod_end_color);
     private boolean useInflateExpose = false;
     private boolean isResetExposeColor = false;
@@ -73,7 +75,7 @@ public abstract class ExposeView extends FrameLayout {
         exposeStatus = ExposeStatus.SHOW;
         startExposeX = bean.targetWidth / 2 + bean.targetRect.left;
         startExposeY = bean.targetHeight / 2 + bean.targetRect.top - bean.statusBarHeight - bean.titleHeight;
-        exposeWidth = (int) Math.hypot(bean.targetWidth / 2, bean.targetHeight / 2) / 4;
+        exposeWidth = Math.min((int) Math.hypot(bean.targetWidth / 2, bean.targetHeight / 2) / 4, exposeSpeed);
         maxExposeWidth = (int) Math.hypot(Math.max(startExposeX, screenWidth - startExposeX), Math.max(startExposeY, screenHeight - startExposeY));
         setBackgroundColor(getResources().getColor(android.R.color.transparent));
         if (mExposeListener != null) {
@@ -110,9 +112,9 @@ public abstract class ExposeView extends FrameLayout {
     }
 
     private void exposeDraw(Canvas canvas) {
-        if (exposeWidth < maxExposeWidth) {
+        if ((exposeWidth - exposeSpeed) < maxExposeWidth) {
             if (mExposeListener != null) {
-                mExposeListener.onExposeProgrees((float) exposeWidth / maxExposeWidth);
+                mExposeListener.onExposeProgrees((float) (exposeWidth - exposeSpeed) / maxExposeWidth);
             }
             if (useInflateExpose && inflateBitmap != null) {
                 exposeCanvas.drawBitmap(inflateBitmap, null, new RectF(0, 0, screenWidth, screenHeight), null);
@@ -124,7 +126,7 @@ public abstract class ExposeView extends FrameLayout {
             animDrawing(exposeCanvas, exposePaint);
             //加速度的方式更改揭露动画速度
             exposeWidth += exposeSpeed;
-            exposeSpeed += 6;
+            exposeSpeed += exposeAcceleration;
             exposePaint.setXfermode(null);
             if (canvasBitmap != null && !canvasBitmap.isRecycled()) {
                 canvas.drawBitmap(canvasBitmap, 0, 0, null);
@@ -141,6 +143,16 @@ public abstract class ExposeView extends FrameLayout {
         }
     }
 
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        boolean result = false;
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                result = true;
+        }
+        return result;
+    }
 
     private void recyle() {
         if (canvasBitmap != null) {
@@ -167,6 +179,10 @@ public abstract class ExposeView extends FrameLayout {
         setExposeColor(exposeColor, false);
     }
 
+    public void setExposeAcceleration(int exposeAcceleration) {
+        this.exposeAcceleration = exposeAcceleration;
+    }
+
     public void setExposeColor(int exposeColor, boolean useInflate) {
         this.useInflateExpose = useInflate;
         this.isResetExposeColor = true;
@@ -185,6 +201,7 @@ public abstract class ExposeView extends FrameLayout {
     public boolean isResetExposeColor() {
         return isResetExposeColor;
     }
+
 
     public abstract void animDrawing(Canvas canvas, Paint paint);
 

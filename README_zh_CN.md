@@ -60,6 +60,7 @@ API compatible with <b>Android 2.2+</b>
 | ------------------------- | ------- 
 | setExposeView              | 支持CirleExposeView，FoldExposeView（你可以通过继承ExposeView来自定义需要的揭露动画）  
 | setExposeColor     |    设置揭露动画的颜色，如果不设置就是透明，**推荐设置**
+| setExposeAcceleration     |    必须 > 0 ，默认是 7
 | setShowMethod    |  NoneShowMethod(默认),ColorShowMethod,InflateShowMethod（你可以通过继承ShowMethod来自定义需要的展示过渡方法） 
 | intoTargetView  |  通过设置这个，在回调loadTargetView中使用
 | setTransitionDuration |  设置转场动画时间
@@ -74,7 +75,7 @@ API compatible with <b>Android 2.2+</b>
 
 ```java
 dependencies {
-   compile 'me.immortalz:transitionhelper:2.2.1'
+   compile 'me.immortalz:transitionhelper:2.3.0'
 }
 ```
 
@@ -84,7 +85,7 @@ dependencies {
 <dependency>
   <groupId>me.immortalz</groupId>
   <artifactId>transitionhelper</artifactId>
-  <version>2.2.1</version>
+  <version>2.3.0</version>
   <type>pom</type>
 </dependency>
 ```
@@ -99,6 +100,11 @@ dependencies {
 - [x] Add Animation Listener
 
 ## 更新记录
+
+**v2.3**
+
+- 移除 TransitionsHeleper.onPause 这个方法(使用 TransitionsHeleper.unbind 来替代)
+- 增加对揭露动画加速度的设置 setExposeAcceleration
 
 **v2.2**
 

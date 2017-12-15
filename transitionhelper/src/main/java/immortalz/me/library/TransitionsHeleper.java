@@ -53,6 +53,8 @@ public class TransitionsHeleper {
 
     private int exposeColor;
 
+    private int exposeAcceleration;
+
     private boolean useInflateExpose;
 
     private View targetView;
@@ -63,6 +65,7 @@ public class TransitionsHeleper {
         showMethod = builder.showMethod;
         exposeView = builder.exposeView;
         exposeColor = builder.exposeColor;
+        exposeAcceleration = builder.exposeAcceleration;
         useInflateExpose = builder.useInflateExpose;
         transitionListener = builder.transitionListener;
         transitionDuration = builder.transitionDuration;
@@ -137,6 +140,9 @@ public class TransitionsHeleper {
     private static void startEngine(final Activity activity, final Class<?> cls, Intent intent, final View view, final Object load,
                                     final boolean isForResult, final int requestCode, final Bundle options,
                                     final boolean isFragment, final Fragment fragment) {
+        if (activity == null) {
+            throw new IllegalArgumentException("You cannot start with a null activity");
+        }
         if (intent == null) {
             intent = new Intent(activity, cls);
         }
@@ -224,6 +230,9 @@ public class TransitionsHeleper {
                     exposeView.setInflateBitmap(BitmapUtils.createBitmap(((InflateShowMethod) showMethod).inflateView, bean.windowWidth, bean.windowHeight, true));
                 }
                 exposeView.setExposeColor(exposeColor, useInflateExpose);
+                if (exposeAcceleration > 0) {
+                    exposeView.setExposeAcceleration(exposeAcceleration);
+                }
                 final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
                 parent.addView(exposeView, params);
@@ -318,7 +327,7 @@ public class TransitionsHeleper {
     }
 
 
-    public static void onPause(Activity activity) {
+    public static void unbind(Activity activity) {
         if (sTransitionMap.get(activity.getClass().getName()) != null) {
             WeakReference<TransitionsHeleper> weakT = sTransitionMap.get(activity.getClass().getName());
             if (weakT != null && weakT.get() != null) {
@@ -352,6 +361,8 @@ public class TransitionsHeleper {
         private ExposeView exposeView;
 
         private int exposeColor;
+
+        private int exposeAcceleration;
 
         private boolean useInflateExpose;
 
@@ -393,6 +404,11 @@ public class TransitionsHeleper {
 
         public TransitionBuilder setTransitionListener(TransitionListener transitionListener) {
             this.transitionListener = transitionListener;
+            return this;
+        }
+
+        public TransitionBuilder setExposeAcceleration(int exposeAcceleration) {
+            this.exposeAcceleration = exposeAcceleration;
             return this;
         }
 

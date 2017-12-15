@@ -48,9 +48,9 @@ API compatible with <b>Android 2.2+</b>
 **3. unbind this**
 ```
     @Override
-    protected void onPause() {
-        super.onPause();
-        TransitionsHeleper.onPause(this);
+    protected void onDestroy() {
+        TransitionsHeleper.unbind(this);
+        super.onDestroy();
     }
 ```
 
@@ -60,6 +60,7 @@ API compatible with <b>Android 2.2+</b>
 | ------------------------- | ------- 
 | setExposeView              | CirleExposeView，FoldExposeView（you can custom others by extends ExposeView）  
 | setExposeColor     |    if not set , will be transparent color
+| setExposeAcceleration     |    must > 0 ，default 7
 | setShowMethod    | NoneShowMethod(Default),ColorShowMethod,InflateShowMethod（you can custom others by extends ShowMethod） 
 | intoTargetView  |  
 | setTransitionDuration |  
@@ -74,7 +75,7 @@ API compatible with <b>Android 2.2+</b>
 
 ```java
 dependencies {
-   compile 'me.immortalz:transitionhelper:2.2.1'
+   compile 'me.immortalz:transitionhelper:2.3.0'
 }
 ```
 
@@ -84,7 +85,7 @@ dependencies {
 <dependency>
   <groupId>me.immortalz</groupId>
   <artifactId>transitionhelper</artifactId>
-  <version>2.2.1</version>
+  <version>2.3.0</version>
   <type>pom</type>
 </dependency>
 ```
@@ -99,6 +100,11 @@ dependencies {
 - [x] Add Animation Listener
 
 ## Update record
+
+**v2.3**
+
+- remove TransitionsHeleper.onPause (add TransitionsHeleper.unbind)
+- Add setExposeAcceleration
 
 **v2.2**
 
