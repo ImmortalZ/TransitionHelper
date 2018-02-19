@@ -7,7 +7,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import butterknife.Bind;
+import butterknife.OnClick;
 import immortalz.me.library.TransitionsHeleper;
 import immortalz.me.library.bean.InfoBean;
 import immortalz.me.library.method.ColorShowMethod;
@@ -20,6 +24,9 @@ import immortalz.me.transitionhelper.base.BaseActivity;
  */
 
 public class FabCircleActivity extends BaseActivity {
+
+    @Bind(R.id.tv)
+    TextView tv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,4 +60,8 @@ public class FabCircleActivity extends BaseActivity {
         return R.layout.activity_fab_detail;
     }
 
+    @OnClick(R.id.tv)
+    public void onClick() {
+        Toast.makeText(this, "click", Toast.LENGTH_SHORT).show();
+    }
 }

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 
-import immortalz.me.library.R;
 import immortalz.me.library.bean.InfoBean;
 import immortalz.me.library.expose.base.ExposeView;
 
@@ -16,17 +15,14 @@ import immortalz.me.library.expose.base.ExposeView;
  * email : mr_immortalz@qq.com
  */
 
-public  class NoneShowMethod extends ShowMethod {
+public class NoneShowMethod extends ShowMethod {
 
-    public int startColor;
-    public int endColor;
 
     @Override
     public void translate(InfoBean bean, ExposeView parent, View child) {
-
-        startColor = parent.getResources().getColor(R.color.transitionhelper_showmethod_start_color);
-        endColor = parent.getResources().getColor(R.color.transitionhelper_showmethod_end_color);
-
+        set.playTogether(
+                ObjectAnimator.ofFloat(child, "scaleY", 1)
+        );
         set.setInterpolator(new AccelerateInterpolator());
         set.setDuration(showDuration).start();
     }
@@ -35,7 +31,7 @@ public  class NoneShowMethod extends ShowMethod {
     public void loadPlaceholder(InfoBean bean, ImageView placeholder) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-                ObjectAnimator.ofFloat(placeholder,"rotation",0,180),
+                ObjectAnimator.ofFloat(placeholder, "rotation", 0, 180),
                 ObjectAnimator.ofFloat(placeholder, "scaleX", 1, 0),
                 ObjectAnimator.ofFloat(placeholder, "scaleY", 1, 0)
         );
