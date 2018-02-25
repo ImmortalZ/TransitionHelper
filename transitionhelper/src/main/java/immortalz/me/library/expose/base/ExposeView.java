@@ -9,7 +9,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Xfermode;
 import android.view.MotionEvent;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import immortalz.me.library.R;
 import immortalz.me.library.bean.InfoBean;
@@ -21,7 +21,7 @@ import immortalz.me.library.listener.ExposeListener;
  * email : mr_immortalz@qq.com
  */
 
-public abstract class ExposeView extends FrameLayout {
+public abstract class ExposeView extends RelativeLayout {
     private Context context;
     protected Paint exposePaint;
     private Canvas exposeCanvas;

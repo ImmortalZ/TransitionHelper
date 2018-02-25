@@ -75,7 +75,7 @@ API compatible with <b>Android 2.2+</b>
 
 ```java
 dependencies {
-   compile 'me.immortalz:transitionhelper:2.3.2'
+   compile 'me.immortalz:transitionhelper:2.3.3'
 }
 ```
 

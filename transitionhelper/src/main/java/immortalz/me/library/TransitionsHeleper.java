@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -28,6 +27,8 @@ import immortalz.me.library.method.InflateShowMethod;
 import immortalz.me.library.method.NoneShowMethod;
 import immortalz.me.library.method.ShowMethod;
 import immortalz.me.library.util.BitmapUtils;
+
+import static immortalz.me.library.util.BitmapUtils.createBitmap;
 
 
 /**
@@ -162,12 +163,12 @@ public class TransitionsHeleper {
                 bean.originWidth = view.getWidth();
                 bean.originHeight = view.getHeight();
                 if (load == null) {
-                    bean.bitmap = BitmapUtils.createBitmap(view, bean.originWidth, bean.originHeight, false);
+                    bean.bitmap = createBitmap(view, bean.originWidth, bean.originHeight, false);
                 } else {
                     if (load instanceof Integer || load instanceof String) {
                         bean.setLoad(load);
                     } else {
-                        bean.bitmap = BitmapUtils.createBitmap(view, bean.originWidth, bean.originHeight, false);
+                        bean.bitmap = createBitmap(view, bean.originWidth, bean.originHeight, false);
                     }
                 }
                 finalIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -233,7 +234,7 @@ public class TransitionsHeleper {
                 if (exposeAcceleration > 0) {
                     exposeView.setExposeAcceleration(exposeAcceleration);
                 }
-                final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
                 parent.addView(exposeView, params);
 
