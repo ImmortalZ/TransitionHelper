@@ -17,7 +17,7 @@ public abstract class ShowMethod {
 
     public AnimatorSet set = new AnimatorSet();
 
-    public static final int DEFALUT_DURATION = 480;
+    public static final int DEFALUT_DURATION = 240;
 
     public int showDuration = DEFALUT_DURATION;
 
